@@ -1,0 +1,2 @@
+debian/bin/BixCd usr/bin
+src/BixCd usr/lib/BixC

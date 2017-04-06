@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: BixC
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# BixC_enable (bool): Set to NO by default. Set this variable to YES if you want to enable BixC service.
+# BixC_config (path): Set to /usr/local/etc/BixC.conf by default.
+# BixC_user:  The user account BixC daemon runs as. It uses 'root' user by default.
+# BixC_group: The group account BixC daemon runs as. It uses 'wheel' group by default.
+# BixC_datadir (str): Default to "/var/db/BixC". Base data directory.
+
+. /etc/rc.subr
+
+name=BixC
+rcvar=BixC_enable
+
+: ${BixC_enable:=NO}
+: ${BixC_config=/usr/local/etc/BixC.conf}
+: ${BixC_datadir=/var/db/BixC}
+: ${BixC_user="root"}
+: ${BixC_group="wheel"}
+
+required_files=${BixC_config}
+command=/usr/local/bin/BixCd
+BixC_chdir=${BixC_datadir}
+pidfile="${BixC_datadir}/BixCd.pid"
+stop_cmd=BixC_stop
+command_args="-conf=${BixC_config} -datadir=${BixC_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+BixC_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${BixC_datadir}
+	[ $? -eq 0 ] && chown -R ${BixC_user}:${BixC_group} ${BixC_datadir}
+}
+
+BixC_prestart()
+{
+	if [ ! -d "${BixC_datadir}/." ]; then
+		BixC_create_datadir || return 1
+	fi
+}
+
+BixC_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+BixC_stop()
+{
+    BixC_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${BixC_config} -datadir=${BixC_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

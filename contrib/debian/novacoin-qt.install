@@ -1,0 +1,5 @@
+BixC-qt usr/bin
+share/pixmaps/BixC32.xpm usr/share/pixmaps
+share/pixmaps/BixC80.xpm usr/share/pixmaps
+debian/BixC-qt.desktop usr/share/applications
+debian/BixC-qt.protocol usr/share/kde4/services/

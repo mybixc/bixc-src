@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=BixC
+Comment=BixC P2P Cryptocurrency
+Comment[ru]=BixC, P2P криптовалюта
+Comment[fr]=BixC, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=BixC, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/BixC-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/BixC80.xpm
+MimeType=x-scheme-handler/BixC;
+Categories=Office;

@@ -1,0 +1,11 @@
+[Unit]
+Description=BixC daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=BixC
+ExecStart=/opt/BixC/BixCd
+
+[Install]
+WantedBy=multi-user.target
